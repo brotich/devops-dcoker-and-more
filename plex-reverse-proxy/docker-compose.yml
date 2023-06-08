@@ -33,23 +33,24 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
     restart: unless-stopped
     depends_on:
-      - plex
+      plex:
+        condition: service_started
 
-  # proxy-build:
-  #   build:
-  #     context: nginx
-  #   image: brianrotich/plex-nginx-proxy
-  #   container_name: plex-proxy
-  #   healthcheck:
-  #     test: curl --fail http://localhost/healthz || exit 1
-  #     interval: 10s
-  #     timeout: 2s
-  #     retries: 5
-  #     start_period: 3s
-  #   ports:
-  #     - '32400:32400'
-  #   volumes:
-  #     - "/etc/localtime:/etc/localtime:ro"
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - plex
+  proxy-build:
+    build:
+      context: nginx
+    image: brianrotich/plex-nginx-proxy
+    container_name: plex-proxy
+    healthcheck:
+      test: curl --fail http://localhost/healthz || exit 1
+      interval: 10s
+      timeout: 2s
+      retries: 5
+      start_period: 3s
+    ports:
+      - '32400:32400'
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+    restart: unless-stopped
+    # depends_on:
+    #   - plex
